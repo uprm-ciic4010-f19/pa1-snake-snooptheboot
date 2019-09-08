@@ -20,6 +20,7 @@ public class WorldOne extends WorldBase{
         playerLocation = new Boolean[GridWidthHeightPixelCount][GridWidthHeightPixelCount];
         appleLocation = new Boolean[GridWidthHeightPixelCount][GridWidthHeightPixelCount];
 
+     
     }
 
     @Override

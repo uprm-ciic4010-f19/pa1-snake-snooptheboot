@@ -1,10 +1,15 @@
 package Game.Entities.Dynamic;
 
+import java.lang.Math;
+
 import Main.Handler;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 import java.util.Random;
+
+import Game.GameStates.State;
 
 /**
  * Created by AlexVR on 7/2/2018.
@@ -14,12 +19,16 @@ public class Player {
     public int lenght;
     public boolean justAte;
     private Handler handler;
-
+    public int i= 3 + 1 ; //ID LAST DIGIT = 3 (DIEGO) (Variable used to control speed) -Ademir
     public int xCoord;
     public int yCoord;
 
     public int moveCounter;
-
+    public double scoreCounter = 0; // Variable that keeps track of the score -Ademir
+    public double getScoreCounter() {
+		return scoreCounter;
+    }
+    
     public String direction;//is your first name one?
 
     public Player(Handler handler){
@@ -35,20 +44,32 @@ public class Player {
 
     public void tick(){
         moveCounter++;
-        if(moveCounter>=5) {
+        if(moveCounter>=5 + i) {
             checkCollisionAndMove();
             moveCounter=0;
         }
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP)){
+        
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP) && direction != "Down"){        //Implemented anti backtracking for the snake -Ademir
             direction="Up";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN)){
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN) && direction != "Up"){
             direction="Down";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT)){
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT) && direction != "Right"){
             direction="Left";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT)){
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT) && direction != "Left"){
             direction="Right";
+            
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_MINUS)){// Decreases speed -Ademir
+        	i++;
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_EQUALS)){// Increases speed -Ademir
+        	i--;
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ESCAPE)){   //Pause the game -Ademir
+        	State.setState(handler.getGame().pauseState);
         }
-
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){  //if you press N the Snake Increases in length without adding an apple at a random location -Ademir
+        	lenght++;
+            Tail tail= new Tail (this.xCoord, this.yCoord, handler);
+            handler.getWorld().body.addLast(tail);
+        }
     }
 
     public void checkCollisionAndMove(){
@@ -86,7 +107,15 @@ public class Player {
                 break;
         }
         handler.getWorld().playerLocation[xCoord][yCoord]=true;
-
+        LinkedList<Tail> b = handler.getWorld().body;
+        for(int i =0; i<b.size(); i++){
+        	Tail t = b.get(i);
+        	if(xCoord == t.x){
+        		if(yCoord == t.y){
+        			handler.getGame().stop(); //Kills the snake when impacting itself can be updated -Ademir
+        		}
+        	}
+        }
 
         if(handler.getWorld().appleLocation[xCoord][yCoord]){
             Eat();
@@ -104,7 +133,7 @@ public class Player {
         Random r = new Random();
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-                g.setColor(Color.WHITE);
+                g.setColor(Color.GREEN);
 
                 if(playeLocation[i][j]||handler.getWorld().appleLocation[i][j]){
                     g.fillRect((i*handler.getWorld().GridPixelsize),
@@ -120,7 +149,13 @@ public class Player {
     }
 
     public void Eat(){
+    	scoreCounter = (Math.round(Math.sqrt(2* scoreCounter+ 1)*100)/100.0); //Score equation implemented and rounded to two digits -Ademir
+    	handler.getGame().score = scoreCounter+"";
+    	
+    	System.out.println(scoreCounter);
         lenght++;
+        
+         i = (int) (i - 0.5);  //Speed Increased if apple is eaten -Ademir
         Tail tail= null;
         handler.getWorld().appleLocation[xCoord][yCoord]=false;
         handler.getWorld().appleOnBoard=false;
@@ -231,7 +266,7 @@ public class Player {
         lenght = 0;
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-
+            	
                 handler.getWorld().playerLocation[i][j]=false;
 
             }
