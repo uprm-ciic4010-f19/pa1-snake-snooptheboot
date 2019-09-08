@@ -53,11 +53,12 @@ public class DisplayScreen {
         frame.pack();
     }
 
-    private Color Color(int r, int g, int b) {
+    public static Color Color(int r, int g, int b) {
     	Color color = new Color(r,g,b);
 		return color;
-	}
-
+	
+    }
+    
 	public Canvas getCanvas(){
         return canvas;
     }

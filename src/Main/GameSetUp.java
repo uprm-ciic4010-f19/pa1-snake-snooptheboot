@@ -25,7 +25,7 @@ public class GameSetUp implements Runnable {
     private DisplayScreen display;
     private int width, height;
     public String title;
-
+    public String score = ""; //Score added -Ademir
     private boolean running = false;
     private Thread thread;
 
@@ -166,6 +166,7 @@ public class GameSetUp implements Runnable {
     private void render(){
         bs = display.getCanvas().getBufferStrategy();
         if(bs == null){
+        
             display.getCanvas().createBufferStrategy(3);
             return;
         }
@@ -174,7 +175,9 @@ public class GameSetUp implements Runnable {
         g.clearRect(0, 0, width, height);
 
         //Draw Here!
-
+        g.setFont(new Font("TimesRoman", Font.BOLD, 20));
+        g.drawString("SCORE", 20, 20);
+        g.drawString(score, 110, 20);
         g.drawImage(loading ,0,0,width,height,null);
         if(State.getState() != null)
             State.getState().render(g);
