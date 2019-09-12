@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.Random;
 
+import Game.Entities.Static.Apple;
 import Game.GameStates.State;
 
 /**
@@ -24,7 +25,8 @@ public class Player {
     public int yCoord;
 
     public int moveCounter;
-    public double scoreCounter = 0; // Variable that keeps track of the score -Ademir
+    public static int stepToEatCounter;  // Variable that counts steps the snake takes between Eats. -Diego
+    public int scoreCounter = 0; // Variable that keeps track of the score -Ademir
     public double getScoreCounter() {
 		return scoreCounter;
     }
@@ -44,8 +46,10 @@ public class Player {
 
     public void tick(){
         moveCounter++;
+        
         if(moveCounter>=5 + i) {
             checkCollisionAndMove();
+            stepToEatCounter++;
             moveCounter=0;
         }
         
@@ -70,6 +74,7 @@ public class Player {
             Tail tail= new Tail (this.xCoord, this.yCoord, handler);
             handler.getWorld().body.addLast(tail);
         }
+       
     }
 
     public void checkCollisionAndMove(){
@@ -79,28 +84,28 @@ public class Player {
         switch (direction){
             case "Left":
                 if(xCoord==0){
-                    kill();
+                    xCoord = handler.getWorld().GridWidthHeightPixelCount-1; //Snake teleports to the other side of the screen when hitting the edge. -Diego
                 }else{
                     xCoord--;
                 }
                 break;
             case "Right":
                 if(xCoord==handler.getWorld().GridWidthHeightPixelCount-1){
-                    kill();
+                	xCoord = 0;
                 }else{
                     xCoord++;
                 }
                 break;
             case "Up":
                 if(yCoord==0){
-                    kill();
+                    yCoord = handler.getWorld().GridWidthHeightPixelCount-1;
                 }else{
                     yCoord--;
                 }
                 break;
             case "Down":
                 if(yCoord==handler.getWorld().GridWidthHeightPixelCount-1){
-                    kill();
+                    yCoord = 0;
                 }else{
                     yCoord++;
                 }
@@ -119,6 +124,7 @@ public class Player {
 
         if(handler.getWorld().appleLocation[xCoord][yCoord]){
             Eat();
+            stepToEatCounter = 0;
         }
 
         if(!handler.getWorld().body.isEmpty()) {
@@ -133,13 +139,28 @@ public class Player {
         Random r = new Random();
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-                g.setColor(Color.GREEN);
 
-                if(playeLocation[i][j]||handler.getWorld().appleLocation[i][j]){
+                if(playeLocation[i][j]){							//Colors are now different for snake and apple. -Diego
+                	g.setColor(Color.green);
                     g.fillRect((i*handler.getWorld().GridPixelsize),
                             (j*handler.getWorld().GridPixelsize),
                             handler.getWorld().GridPixelsize,
                             handler.getWorld().GridPixelsize);
+                }
+                if(handler.getWorld().appleLocation[i][j]){
+                	if (!Apple.isGood()) {							//Apple changes color when it rots. -Diego
+                	g.setColor(new Color(89,0,0));
+                    g.fillRect((i*handler.getWorld().GridPixelsize),
+                            (j*handler.getWorld().GridPixelsize),
+                            handler.getWorld().GridPixelsize,
+                            handler.getWorld().GridPixelsize);
+                	}else {
+                		g.setColor(Color.red);
+                        g.fillRect((i*handler.getWorld().GridPixelsize),
+                                (j*handler.getWorld().GridPixelsize),
+                                handler.getWorld().GridPixelsize,
+                                handler.getWorld().GridPixelsize);
+                	}
                 }
 
             }
@@ -149,13 +170,19 @@ public class Player {
     }
 
     public void Eat(){
-    	scoreCounter = (Math.round(Math.sqrt(2* scoreCounter+ 1)*100)/100.0); //Score equation implemented and rounded to two digits -Ademir
+    	if (Apple.isGood()) {
+    		scoreCounter += (Math.round(Math.sqrt(2* scoreCounter+ 1)*100)/100.0); //Score equation implemented and rounded to two digits -Ademir
+    		lenght++;
+        	i = (int) (i - 0.5);  //Speed Increased if apple is eaten -Ademir
+        }else {
+        	scoreCounter -= (Math.round(Math.sqrt(2* scoreCounter+ 1)*100)/100.0); //Score equation implemented and rounded to two digits -Ademir
+            lenght--;
+        	i = (int) (i + 0.5);  //Speed Decreased if bad apple is eaten (CREATIVE DIRECTION). -Diego
+        }
     	handler.getGame().score = scoreCounter+"";
     	
     	System.out.println(scoreCounter);
-        lenght++;
-        
-         i = (int) (i - 0.5);  //Speed Increased if apple is eaten -Ademir
+         
         Tail tail= null;
         handler.getWorld().appleLocation[xCoord][yCoord]=false;
         handler.getWorld().appleOnBoard=false;
@@ -258,8 +285,14 @@ public class Player {
                 }
                 break;
         }
-        handler.getWorld().body.addLast(tail);
-        handler.getWorld().playerLocation[tail.x][tail.y] = true;
+        
+        if (Apple.isGood()) {
+        	handler.getWorld().body.addLast(tail);
+        	handler.getWorld().playerLocation[tail.x][tail.y] = true;
+        } else {
+        	handler.getWorld().body.removeLast();          //Intention: Remove last if apple is bad
+        	handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
+        }
     }
 
     public void kill(){

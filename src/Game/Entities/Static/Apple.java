@@ -1,5 +1,6 @@
 package Game.Entities.Static;
 
+import Game.Entities.Dynamic.Player;
 import Main.Handler;
 
 /**
@@ -18,5 +19,13 @@ public class Apple {
         this.yCoord=y;
     }
 
+	public static boolean isGood() {
+		boolean goodApple = true;				//If the snake takes (x) steps, apples rot.
+		
+		if (Player.stepToEatCounter > 150) {
+			goodApple = false;
+		}
+		return goodApple;
+	}
 
 }

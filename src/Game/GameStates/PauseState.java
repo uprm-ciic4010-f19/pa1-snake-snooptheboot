@@ -7,6 +7,8 @@ import UI.UIManager;
 
 import java.awt.*;
 
+import Game.Entities.Dynamic.Player;
+
 /**
  * Created by AlexVR on 7/1/2018.
  */
@@ -25,13 +27,14 @@ public class PauseState extends State {
             State.setState(handler.getGame().gameState);
         }));
 
-        uiManager.addObjects(new UIImageButton(56, 223+(64+16), 128, 64, Images.Options, () -> {
-            handler.getMouseManager().setUimanager(null);
-            State.setState(handler.getGame().menuState);
-        }));
+//        uiManager.addObjects(new UIImageButton(56, 223+(64+16), 128, 64, Images.Options, () -> {
+//            handler.getMouseManager().setUimanager(null);
+//            State.setState(handler.getGame().menuState);
+//        }));
 
         uiManager.addObjects(new UIImageButton(56, (223+(64+16))+(64+16), 128, 64, Images.BTitle, () -> {
             handler.getMouseManager().setUimanager(null);
+            Player.stepToEatCounter = 0; //Resets stepToEatCounter so that apple will be good on restart.
             State.setState(handler.getGame().menuState);
         }));
 
