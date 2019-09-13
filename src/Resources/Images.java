@@ -17,6 +17,8 @@ public class Images {
     public static BufferedImage[] Resume;
     public static BufferedImage[] BTitle;
     public static BufferedImage[] Options;
+    public static BufferedImage[] Restart;
+    public static BufferedImage gameover; //gameover buffered image -Ademir
     public static ImageIcon icon;
 
     public Images() {
@@ -25,10 +27,11 @@ public class Images {
         Resume = new BufferedImage[2];
         BTitle = new BufferedImage[2];
         Options = new BufferedImage[2];
-
+        Restart = new BufferedImage [2]; //Restart image - Ademir
         try {
 
             title = ImageIO.read(getClass().getResourceAsStream("/Sheets/Title.png"));
+            gameover = ImageIO.read(getClass().getResourceAsStream("/Sheets/gameover.png")); //gameover image -Ademir
             Pause = ImageIO.read(getClass().getResourceAsStream("/Buttons/Pause.png"));
             Resume[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/Resume.png"));
             Resume[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/ResumeP.png"));
@@ -36,10 +39,11 @@ public class Images {
             BTitle[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/BTitleP.png"));
             Options[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/Options.png"));
             Options[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/OptionsP.png"));
-            butstart[0]= ImageIO.read(getClass().getResourceAsStream("/Buttons/NormBut.png"));//normbut
-            butstart[1]= ImageIO.read(getClass().getResourceAsStream("/Buttons/HoverBut.png"));//hoverbut
-            butstart[2]= ImageIO.read(getClass().getResourceAsStream("/Buttons/ClickedBut.png"));//clickbut
-
+            butstart[0]= ImageIO.read(getClass().getResourceAsStream("/Buttons/NormBut.png"));
+            butstart[1]= ImageIO.read(getClass().getResourceAsStream("/Buttons/HoverBut.png"));
+            butstart[2]= ImageIO.read(getClass().getResourceAsStream("/Buttons/ClickedBut.png"));
+            Restart[0]= ImageIO.read(getClass().getResourceAsStream("/Buttons/Restart.png"));//restart button -Ademir
+            Restart[1]= ImageIO.read(getClass().getResourceAsStream("/Buttons/Restart.png")); // restart button -Ademir
             icon =  new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Sheets/icon.png")));
 
 

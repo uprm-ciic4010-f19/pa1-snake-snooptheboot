@@ -117,7 +117,9 @@ public class Player {
         	Tail t = b.get(i);
         	if(xCoord == t.x){
         		if(yCoord == t.y){
-        			handler.getGame().stop(); //Kills the snake when impacting itself can be updated -Ademir
+        			kill();
+        			State.setState(handler.getGame().overState);
+        			//handler.getGame().stop(); //Kills the snake when impacting itself can be updated -Ademir
         		}
         	}
         }
