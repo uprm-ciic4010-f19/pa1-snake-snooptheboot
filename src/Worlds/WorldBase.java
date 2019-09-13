@@ -56,9 +56,9 @@ public abstract class WorldBase {
     //Grid Lines, not visible
     public void render(Graphics g){
 
-//        for (int i = 0; i <= 800; i = i + GridPixelsize) {
+//        for (int i = 0; i <= 600; i = i + GridPixelsize) {
 //
-//            g.setColor(color.black);
+//            g.setColor(Color.black);
 //            g.drawLine(0, i, handler.getWidth() , i);
 //            g.drawLine(i,0,i,handler.getHeight());
 //

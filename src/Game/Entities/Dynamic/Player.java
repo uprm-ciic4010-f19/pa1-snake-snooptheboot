@@ -20,13 +20,13 @@ public class Player {
     public int lenght;
     public boolean justAte;
     private Handler handler;
-    public int i= 3 + 1 ; //ID LAST DIGIT = 3 (DIEGO) (Variable used to control speed) -Ademir
+    public int i= 3 + 1 ; 					//ID LAST DIGIT = 3 (DIEGO) (Variable used to control speed) -Ademir
     public int xCoord;
     public int yCoord;
 
     public int moveCounter;
-    public static int stepToEatCounter;  // Variable that counts steps the snake takes between Eats. -Diego
-    public int scoreCounter = 0; // Variable that keeps track of the score -Ademir
+    public static int stepToEatCounter;  	// Variable that counts steps the snake takes between Eats. -Diego
+    public int scoreCounter = 0; 			// Variable that keeps track of the score -Ademir
     public double getScoreCounter() {
 		return scoreCounter;
     }
