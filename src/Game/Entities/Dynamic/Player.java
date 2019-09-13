@@ -20,15 +20,18 @@ public class Player {
     public int lenght;
     public boolean justAte;
     private Handler handler;
-    public int i= 3 + 1 ; 					//ID LAST DIGIT = 3 (DIEGO) (Variable used to control speed) -Ademir
+    public double i= 3 + 1 ; 					//ID LAST DIGIT = 3 (DIEGO) (Variable used to control speed) -Ademir
     public int xCoord;
     public int yCoord;
 
     public int moveCounter;
     public static int stepToEatCounter;  	// Variable that counts steps the snake takes between Eats. -Diego
-    public int scoreCounter = 0; 			// Variable that keeps track of the score -Ademir
+    public static int scoreCounter = 0; 	// Variable that keeps track of the score -Ademir
     public double getScoreCounter() {
 		return scoreCounter;
+    }
+    public static String toString(int i) {  // Returns a string of the current score (used to print a 0 upon restart) 
+    	return "" + i;
     }
     
     public String direction;//is your first name one?
@@ -118,6 +121,7 @@ public class Player {
         	if(xCoord == t.x){
         		if(yCoord == t.y){
         			kill();
+        			Player.scoreCounter = 0;
         			State.setState(handler.getGame().overState);
         			//handler.getGame().stop(); //Kills the snake when impacting itself can be updated -Ademir
         		}
@@ -175,11 +179,11 @@ public class Player {
     	if (Apple.isGood()) {
     		scoreCounter += (Math.round(Math.sqrt(2* scoreCounter+ 1)*100)/100.0); //Score equation implemented and rounded to two digits -Ademir
     		lenght++;
-        	i = (int) (i - 0.5);  //Speed Increased if apple is eaten -Ademir
+        	i = (i - 0.4);  //Speed Increased if apple is eaten -Ademir
         }else {
         	scoreCounter -= (Math.round(Math.sqrt(2* scoreCounter+ 1)*100)/100.0); //Score equation implemented and rounded to two digits -Ademir
             lenght--;
-        	i = (int) (i + 0.5);  //Speed Decreased if bad apple is eaten (CREATIVE DIRECTION). -Diego
+        	i = (i + 0.4);  //Speed Decreased if bad apple is eaten (CREATIVE DIRECTION). -Diego
         }
     	handler.getGame().score = scoreCounter+"";
     	
@@ -292,8 +296,14 @@ public class Player {
         	handler.getWorld().body.addLast(tail);
         	handler.getWorld().playerLocation[tail.x][tail.y] = true;
         } else {
-        	handler.getWorld().body.removeLast();          //Intention: Remove last if apple is bad
-        	handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
+        	if (handler.getWorld().body.isEmpty()){
+        		kill();
+    			Player.scoreCounter = 0;
+    			State.setState(handler.getGame().overState);
+        	} else {
+        		handler.getWorld().body.removeLast();          //Remove last if apple is bad
+            	handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
+        	}
         }
     }
 

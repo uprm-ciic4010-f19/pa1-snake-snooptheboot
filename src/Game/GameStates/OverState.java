@@ -7,6 +7,8 @@ import UI.UIManager;
 
 import java.awt.*;
 
+import Game.Entities.Dynamic.Player;
+
 /**
  * Created by AlexVR on 7/1/2018.
  */
@@ -22,6 +24,8 @@ public class OverState extends State {
 
         uiManager.addObjects(new UIImageButton(150, 20, 128, 64, Images.Restart, () -> { //location of restart button - Ademir
             handler.getMouseManager().setUimanager(null);
+            Player.scoreCounter = 0;
+            System.out.println(Player.scoreCounter);
             handler.getGame().reStart();
             State.setState(handler.getGame().gameState);
            

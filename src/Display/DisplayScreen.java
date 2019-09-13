@@ -12,8 +12,8 @@ import javax.swing.*;
 
 public class DisplayScreen {
 
-    private JFrame frame;
-    private Canvas canvas;
+    private JFrame frame, score;
+    private Canvas canvas, scoreC;
     private String title;
     private int width, height;
 
@@ -53,7 +53,12 @@ public class DisplayScreen {
         frame.pack();
     }
 
-    
+    public Canvas getScoreC() {
+    	return scoreC;
+    }
+    public JFrame getScore() {
+    	return score;
+    }
 	public Canvas getCanvas(){
         return canvas;
     }

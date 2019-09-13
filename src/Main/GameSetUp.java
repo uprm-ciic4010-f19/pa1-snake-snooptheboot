@@ -1,6 +1,7 @@
 package Main;
 
 import Display.DisplayScreen;
+import Game.Entities.Dynamic.Player;
 import Game.GameStates.GameState;
 import Game.GameStates.MenuState;
 import Game.GameStates.OverState;
@@ -26,7 +27,7 @@ public class GameSetUp implements Runnable {
     private DisplayScreen display;
     private int width, height;
     public String title;
-    public String score = ""; //Score added -Ademir
+    public String score = "0"; //Score added -Ademir
     private boolean running = false;
     private Thread thread;
 
@@ -107,6 +108,7 @@ public class GameSetUp implements Runnable {
     }
 
     public void reStart(){
+    	handler.getGame().render();
         gameState = new GameState(handler);
     }
 
@@ -180,9 +182,9 @@ public class GameSetUp implements Runnable {
         //Draw Here!
         g.setFont(new Font("TimesRoman", Font.BOLD, 20));
         g.drawString("SCORE", 20, 20);
-        g.drawString(score, 110, 20);
-        g.drawImage(loading ,0,0,width,height,null);
-        if(State.getState() != null)
+        g.drawString(Player.toString(Player.scoreCounter), 110, 20); 	// Calls upon variables in Player class so the score visually resets
+        g.drawImage(loading ,0,0,width,height,null);					// upon clicking "Restart" from Pause and and "Start" from Menu after
+        if(State.getState() != null)									// pausing and quitting
             State.getState().render(g);
 
 
